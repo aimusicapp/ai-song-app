@@ -17,8 +17,13 @@ jobs:
         with:
           channel: 'stable'
 
-      - name: Regenerate native Android project files
-        run: flutter create --platforms=android --org com.aisongapp --project-name ai_song_app --overwrite .
+      - name: Generate fresh Android files in a separate folder
+        run: flutter create --platforms=android --org com.aisongapp --project-name ai_song_app /tmp/scaffold
+
+      - name: Replace only the android folder (keep our app code untouched)
+        run: |
+          rm -rf android
+          cp -r /tmp/scaffold/android ./android
 
       - name: Restore required permissions in AndroidManifest.xml
         run: |
