@@ -15,14 +15,19 @@ jobs:
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.24.0'
           channel: 'stable'
 
       - name: Regenerate native Android project files
-        run: flutter create --platforms=android --org com.aisongapp --project-name ai_song_app .
+        run: flutter create --platforms=android --org com.aisongapp --project-name ai_song_app --overwrite .
 
-      - name: Fix Kotlin plugin version
-        run: sed -i 's/id "org.jetbrains.kotlin.android" version "[^"]*"/id "org.jetbrains.kotlin.android" version "1.9.24"/' android/settings.gradle
+      - name: Restore required permissions in AndroidManifest.xml
+        run: |
+          sed -i '/<manifest xmlns:android/a\
+              <uses-permission android:name="android.permission.CAMERA" />\
+              <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" android:maxSdkVersion="28" />\
+              <uses-permission android:name="android.permission.READ_MEDIA_AUDIO" />\
+              <uses-feature android:name="android.hardware.camera" android:required="false" />' android/app/src/main/AndroidManifest.xml
+          sed -i 's/<application/<application android:requestLegacyExternalStorage="true"/' android/app/src/main/AndroidManifest.xml
 
       - name: Install dependencies
         run: flutter pub get
