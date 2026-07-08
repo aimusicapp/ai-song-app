@@ -18,6 +18,9 @@ jobs:
           flutter-version: '3.24.0'
           channel: 'stable'
 
+      - name: Regenerate native Android project files
+        run: flutter create --platforms=android --org com.aisongapp --project-name ai_song_app .
+
       - name: Install dependencies
         run: flutter pub get
 
