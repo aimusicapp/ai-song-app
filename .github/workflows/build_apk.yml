@@ -21,6 +21,9 @@ jobs:
       - name: Regenerate native Android project files
         run: flutter create --platforms=android --org com.aisongapp --project-name ai_song_app .
 
+      - name: Fix Kotlin plugin version
+        run: sed -i 's/id "org.jetbrains.kotlin.android" version "[^"]*"/id "org.jetbrains.kotlin.android" version "1.9.24"/' android/settings.gradle
+
       - name: Install dependencies
         run: flutter pub get
 
